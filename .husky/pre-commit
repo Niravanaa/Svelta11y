@@ -1,5 +1,3 @@
-#!/bin/sh
-. "$(dirname "$0")/_/husky.sh"
 npx prettier --check .
 npx eslint .
 npx vitest run --coverage --coverage.threshold=80

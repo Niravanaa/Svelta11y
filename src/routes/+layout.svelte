@@ -25,7 +25,7 @@
 		<slot />
 	</main>
 
-	<footer class="mt-8 py-4 shadow-lg border-t">
+	<footer class="mt-8 border-t py-4 shadow-lg">
 		<div class="container mx-auto px-4 text-center text-sm">
 			&copy; {new Date().getFullYear()} WCAG Scanner. All rights reserved.
 		</div>
