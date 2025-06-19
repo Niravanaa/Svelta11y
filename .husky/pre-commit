@@ -1,3 +1,2 @@
-npx prettier --check .
-npx eslint .
+npx lint-staged
 npx vitest run --coverage --coverage.threshold=80

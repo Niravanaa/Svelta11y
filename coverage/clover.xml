@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1750361239349" clover="3.2.0">
-  <project timestamp="1750361239349" name="All files">
+<coverage generated="1750361457819" clover="3.2.0">
+  <project timestamp="1750361457820" name="All files">
     <metrics statements="117" coveredstatements="0" conditionals="14" coveredconditionals="9" methods="14" coveredmethods="9" elements="145" coveredelements="18" complexity="0" loc="117" ncloc="117" packages="5" files="15" classes="15"/>
     <package name="WCAG-Scanner">
       <metrics statements="24" coveredstatements="0" conditionals="3" coveredconditionals="0" methods="3" coveredmethods="0"/>
