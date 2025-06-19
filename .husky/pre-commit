@@ -1,2 +1,7 @@
+echo "🔍 Running lint-staged (formatting & linting staged files)..."
 npx lint-staged
-npx vitest run --coverage --coverage.threshold=80 --browser.headless
+
+echo "🧪 Running tests with coverage (80% threshold)..."
+npx vitest run --coverage --coverage.threshold=80
+
+echo "✅ Pre-commit checks passed!"

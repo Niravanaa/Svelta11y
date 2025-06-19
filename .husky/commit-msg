@@ -1,1 +1,2 @@
+echo "📝 Running commitlint on your commit message..."
 npx --no-install commitlint --edit $1
