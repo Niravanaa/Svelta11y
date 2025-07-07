@@ -12,13 +12,11 @@ const config = {
 		adapter: adapter({
 			// Use nodejs runtime for compatibility
 			runtime: 'nodejs20.x',
-			// Disable external dependencies splitting for Windows
+			// Disable external dependencies splitting for better compatibility
 			external: [],
-			// Enable ISR (Incremental Static Regeneration) for better caching
-			isr: {
-				// Cache static pages for 1 hour
-				expiration: 3600
-			}
+			// Simplified configuration to avoid deployment issues
+			regions: ['iad1', 'cle1'], // Primary and fallback regions
+			memory: 1024
 		})
 	}
 };
