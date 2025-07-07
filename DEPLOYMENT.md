@@ -155,6 +155,8 @@ The project is configured to use:
 }
 ```
 
+**Note:** Function runtimes are automatically configured by the SvelteKit Vercel adapter. You don't need to manually specify them in `vercel.json`.
+
 ### Edge Runtime (Optional)
 
 For better performance, you can enable edge runtime in `svelte.config.js`:
