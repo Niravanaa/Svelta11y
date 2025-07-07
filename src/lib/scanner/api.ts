@@ -1,6 +1,6 @@
-import { chromium as playwright } from 'playwright-core';
+import puppeteer from 'puppeteer-core';
 import chromium from '@sparticuz/chromium';
-import type { Browser, BrowserContext } from 'playwright-core';
+import type { Browser } from 'puppeteer-core';
 import type {
 	ScanOptions,
 	SinglePageScanResult,
@@ -81,7 +81,6 @@ class ScanLogger {
 
 export class WCAGScanner {
 	private browser: Browser | null = null;
-	private context: BrowserContext | null = null;
 	private logger: ScanLogger | null = null;
 	private debugMode: boolean = false;
 
@@ -96,36 +95,11 @@ export class WCAGScanner {
 		if (!this.browser) {
 			console.log(`🚀 Launching browser in ${this.debugMode ? 'headed (DEBUG)' : 'headless'} mode`);
 
-			// Configure launch options for serverless compatibility
-			const launchOptions: import('playwright-core').LaunchOptions = {
-				args: [
-					...chromium.args,
-					'--no-sandbox',
-					'--disable-setuid-sandbox',
-					'--disable-dev-shm-usage',
-					'--disable-gpu',
-					'--no-first-run',
-					'--no-zygote',
-					'--single-process',
-					'--disable-features=VizDisplayCompositor'
-				],
-				executablePath: await chromium.executablePath(),
-				headless: true,
-				ignoreDefaultArgs: ['--disable-extensions']
-			};
-
-			// Only enable devtools in local debug mode (not in serverless)
-			if (this.debugMode && process.env.NODE_ENV !== 'production') {
-				launchOptions.headless = false;
-				launchOptions.devtools = true;
-			}
-
 			try {
-				this.browser = await playwright.launch(launchOptions);
-				this.context = await this.browser.newContext({
-					// Set a realistic user agent to avoid anti-bot detection
-					userAgent:
-						'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
+				this.browser = await puppeteer.launch({
+					args: chromium.args,
+					executablePath: await chromium.executablePath(),
+					headless: chromium.headless
 				});
 			} catch (error) {
 				console.error('Browser launch failed:', error);
@@ -146,7 +120,6 @@ export class WCAGScanner {
 		if (this.browser) {
 			await this.browser.close();
 			this.browser = null;
-			this.context = null;
 		}
 		if (this.logger) {
 			this.logger.restore();
@@ -167,24 +140,29 @@ export class WCAGScanner {
 	async scanSinglePage(options: ScanOptions): Promise<SinglePageScanResult> {
 		await this.initialize();
 
-		if (!this.context) {
+		if (!this.browser) {
 			throw new Error('Scanner not properly initialized');
 		}
 
-		const page = await this.context.newPage();
+		const page = await this.browser.newPage();
 
 		try {
 			// Set viewport and timeouts
-			await page.setViewportSize({ width: 1920, height: 1080 });
+			await page.setViewport({ width: 1920, height: 1080 });
 			page.setDefaultNavigationTimeout(options.timeout || 30000);
 			page.setDefaultTimeout(options.timeout || 30000);
+
+			// Set user agent
+			await page.setUserAgent(
+				'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
+			);
 
 			console.log(`🔍 Scanning: ${options.url}`);
 			console.log(`⚙️ Debug mode: ${this.debugMode ? 'ON' : 'OFF'}`);
 
 			// Navigate to the page
 			console.log(`📡 Navigating to page...`);
-			const response = await page.goto(options.url, { waitUntil: 'networkidle' });
+			const response = await page.goto(options.url, { waitUntil: 'networkidle0' });
 
 			if (!response || !response.ok()) {
 				throw new Error(`Failed to load page: ${options.url} (${response?.status()})`);
@@ -197,7 +175,7 @@ export class WCAGScanner {
 			console.log(`📄 Page title: "${title}"`);
 
 			// Check if page has expected content
-			const bodyText = await page.textContent('body');
+			const bodyText = await page.$eval('body', (el) => el.textContent);
 			const bodyLength = bodyText?.length || 0;
 			console.log(`📝 Page content length: ${bodyLength} characters`);
 
@@ -205,15 +183,6 @@ export class WCAGScanner {
 			const waitTime = options.waitTime || 3000;
 			console.log(`⏳ Waiting ${waitTime}ms for dynamic content...`);
 			await new Promise((resolve) => setTimeout(resolve, waitTime));
-
-			// Check for common anti-bot or error indicators
-			const hasErrorMessage = (await page.locator('text=error').count()) > 0;
-			const hasBlockMessage = (await page.locator('text=blocked').count()) > 0;
-			const hasAccessDenied = (await page.locator('text=access denied').count()) > 0;
-
-			if (hasErrorMessage || hasBlockMessage || hasAccessDenied) {
-				console.warn(`⚠️ Potential page access issue detected`);
-			}
 
 			// Take screenshot if requested
 			let screenshot: string | undefined;
@@ -223,7 +192,7 @@ export class WCAGScanner {
 					fullPage: true,
 					type: 'png'
 				});
-				screenshot = screenshotBuffer.toString('base64');
+				screenshot = Buffer.from(screenshotBuffer).toString('base64');
 			}
 
 			// Inject axe-core
@@ -233,7 +202,9 @@ export class WCAGScanner {
 			});
 
 			// Verify axe loaded
-			const axeLoaded = await page.evaluate(() => typeof window.axe !== 'undefined');
+			const axeLoaded = await page.evaluate(
+				() => typeof (window as Window & { axe?: unknown }).axe !== 'undefined'
+			);
 			if (!axeLoaded) {
 				throw new Error('Failed to load axe-core library');
 			}
@@ -249,10 +220,19 @@ export class WCAGScanner {
 
 			// Run axe accessibility scan
 			console.log(`🔍 Running axe accessibility scan...`);
-			const results = (await page.evaluate(async (axeConfig) => {
-				if (typeof window.axe !== 'undefined') {
+			const results = (await page.evaluate(async (axeConfig: Record<string, unknown>) => {
+				type AxeType = {
+					run: (config: Record<string, unknown>) => Promise<{
+						violations: unknown[];
+						passes: unknown[];
+						incomplete: unknown[];
+						inapplicable: unknown[];
+					}>;
+				};
+				const win = window as typeof window & { axe?: AxeType };
+				if (typeof win.axe !== 'undefined') {
 					// Run the scan
-					const scanResults = await window.axe.run(axeConfig);
+					const scanResults = await win.axe.run(axeConfig);
 
 					console.log(`Scan completed. Found ${scanResults.violations.length} violations`);
 					console.log(
@@ -301,6 +281,7 @@ export class WCAGScanner {
 			await page.close();
 		}
 	}
+	// ...existing code...
 
 	/**
 	 * Scan multiple URLs
