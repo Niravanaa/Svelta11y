@@ -14,8 +14,8 @@ const config = {
 			runtime: 'nodejs20.x',
 			// Disable external dependencies splitting for better compatibility
 			external: [],
-			// Simplified configuration to avoid deployment issues
-			regions: ['iad1', 'cle1'], // Primary and fallback regions
+			// Restrict to a single region for Hobby plan
+			regions: ['iad1'],
 			memory: 1024
 		})
 	}
