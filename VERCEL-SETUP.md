@@ -2,6 +2,29 @@
 
 Your WCAG Scanner project is now configured for Vercel deployments with per-branch support. Here's what has been set up:
 
+## 🔧 System Requirements
+
+- **Node.js 20.x** (recommended for optimal compatibility)
+- npm or yarn package manager
+- Git for version control
+
+### Node.js Version Check
+
+This project is optimized for Node.js 20.x. To verify your version:
+
+```bash
+node --version  # Should show v20.x.x
+```
+
+If you need to switch versions (using nvm):
+
+```bash
+nvm use 20
+# or install specific version
+nvm install 20.18.0
+nvm use 20.18.0
+```
+
 ## 📁 Files Added/Modified
 
 ### ✅ Core Configuration

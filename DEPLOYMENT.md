@@ -6,7 +6,31 @@ This guide will help you set up per-branch deployments on Vercel for the WCAG Sc
 
 1. A [Vercel account](https://vercel.com/)
 2. A GitHub repository for your project
-3. Vercel CLI installed globally: `npm install -g vercel`
+3. Node.js 20.x (recommended for optimal compatibility)
+4. Vercel CLI installed globally: `npm install -g vercel`
+
+## Important: Node.js Version
+
+This project is optimized for **Node.js 20.x**. While it may work with other versions, we strongly recommend using Node.js 20.x for:
+
+- Local development consistency
+- CI/CD pipeline compatibility
+- Vercel deployment compatibility
+
+To check your Node.js version:
+
+```bash
+node --version
+```
+
+To switch to Node.js 20.x (if using nvm):
+
+```bash
+nvm use 20
+# or
+nvm install 20.18.0
+nvm use 20.18.0
+```
 
 ## Step 1: Initial Vercel Setup
 
