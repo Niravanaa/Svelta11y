@@ -1,5 +1,6 @@
 import { chromium } from 'playwright';
 import type { Browser, BrowserContext } from 'playwright';
+import playwright from 'playwright';
 import type {
 	ScanOptions,
 	SinglePageScanResult,
@@ -10,6 +11,8 @@ import type {
 	Violation,
 	LogEntry
 } from './types.js';
+import { execSync } from 'child_process';
+import { existsSync } from 'fs';
 
 /**
  * Logger class to capture console output during scans
@@ -493,3 +496,16 @@ export async function debugScan(
 		await scanner.cleanup();
 	}
 }
+
+function ensurePlaywrightBrowsersInstalled() {
+	try {
+		const chromiumPath = playwright.chromium.executablePath();
+		if (!existsSync(chromiumPath)) {
+			execSync('npx playwright install chromium', { stdio: 'inherit' });
+		}
+	} catch {
+		execSync('npx playwright install chromium', { stdio: 'inherit' });
+	}
+}
+
+ensurePlaywrightBrowsersInstalled();
