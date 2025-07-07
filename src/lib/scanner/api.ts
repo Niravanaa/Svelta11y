@@ -13,6 +13,81 @@ import type {
 } from './types.js';
 
 /**
+ * Detect if we're running in a serverless environment
+ */
+function isServerless(): boolean {
+	return (
+		process.env.VERCEL === '1' ||
+		process.env.AWS_LAMBDA_FUNCTION_NAME !== undefined ||
+		process.env.NETLIFY === 'true' ||
+		process.env.CF_PAGES === '1'
+	);
+}
+
+/**
+ * Get browser launch options based on environment
+ */
+async function getBrowserOptions(): Promise<{
+	args: string[];
+	executablePath?: string;
+	headless: boolean;
+}> {
+	if (isServerless()) {
+		console.log('🔧 Using serverless configuration (@sparticuz/chromium)');
+		return {
+			args: chromium.args,
+			executablePath: await chromium.executablePath(),
+			headless: true // Always headless in serverless
+		};
+	} else {
+		console.log('🔧 Using local development configuration');
+		// For local development, use system Chrome/Chromium
+		// On Windows, try common Chrome installation paths
+		const possiblePaths = [
+			'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe',
+			'C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe',
+			'C:\\Users\\' +
+				process.env.USERNAME +
+				'\\AppData\\Local\\Google\\Chrome\\Application\\chrome.exe'
+		];
+
+		// Try to find Chrome executable
+		let executablePath: string | undefined;
+		for (const path of possiblePaths) {
+			try {
+				const fs = await import('fs');
+				if (fs.existsSync(path)) {
+					executablePath = path;
+					console.log(`📍 Found Chrome at: ${path}`);
+					break;
+				}
+			} catch {
+				// Continue to next path
+			}
+		}
+
+		if (!executablePath) {
+			console.log('⚠️  Chrome not found in common locations, using default');
+		}
+
+		return {
+			args: [
+				'--no-sandbox',
+				'--disable-setuid-sandbox',
+				'--disable-dev-shm-usage',
+				'--disable-accelerated-2d-canvas',
+				'--no-first-run',
+				'--no-zygote',
+				'--single-process',
+				'--disable-gpu'
+			],
+			executablePath,
+			headless: true
+		};
+	}
+}
+
+/**
  * Logger class to capture console output during scans
  */
 class ScanLogger {
@@ -96,11 +171,14 @@ export class WCAGScanner {
 			console.log(`🚀 Launching browser in ${this.debugMode ? 'headed (DEBUG)' : 'headless'} mode`);
 
 			try {
-				this.browser = await puppeteer.launch({
-					args: chromium.args,
-					executablePath: await chromium.executablePath(),
-					headless: chromium.headless
-				});
+				const browserOptions = await getBrowserOptions();
+
+				// Override headless mode for debug
+				if (this.debugMode && !isServerless()) {
+					browserOptions.headless = false;
+				}
+
+				this.browser = await puppeteer.launch(browserOptions);
 			} catch (error) {
 				console.error('Browser launch failed:', error);
 				throw new Error(
