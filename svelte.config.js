@@ -10,8 +10,8 @@ const config = {
 	kit: {
 		// Vercel adapter for deployment
 		adapter: adapter({
-			// Use nodejs runtime for better Windows compatibility
-			runtime: 'nodejs18.x',
+			// Use nodejs runtime for compatibility
+			runtime: 'nodejs20.x',
 			// Disable external dependencies splitting for Windows
 			external: [],
 			// Enable ISR (Incremental Static Regeneration) for better caching
