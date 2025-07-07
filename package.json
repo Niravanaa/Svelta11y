@@ -8,7 +8,7 @@
 	},
 	"scripts": {
 		"dev": "vite dev",
-		"build": "vite build",
+		"build": "vite build && npx playwright install",
 		"preview": "vite preview",
 		"prepare": "husky",
 		"postinstall": "node -e \"const v=process.version; if(!v.startsWith('v20.') && !v.startsWith('v22.')){console.warn('⚠️  Warning: Node.js 20.x or 22.x recommended for optimal compatibility');}\"",
