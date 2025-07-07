@@ -1,4 +1,5 @@
 <!-- Improved compatibility of back to top link: See: https://github.com/othneildrew/Best-README-Template/pull/73 -->
+
 <a id="readme-top"></a>
 
 <!-- PROJECT LOGO -->
@@ -47,11 +48,13 @@
 </details>
 
 <!-- ABOUT THE PROJECT -->
+
 ## About The Project
 
 WCAG Scanner is a modern web application designed to help developers and organizations ensure their websites meet Web Content Accessibility Guidelines (WCAG) standards. Built with accessibility and usability in mind, this tool provides comprehensive scanning capabilities to identify and help fix accessibility issues that could prevent users from accessing your content.
 
 **Key Goals:**
+
 - **Empowerment**: Enable developers to create more accessible web experiences
 - **Comprehensive Analysis**: Leverage axe DevTools for thorough accessibility testing
 - **User-Friendly**: Provide an intuitive interface for both technical and non-technical users
@@ -63,24 +66,25 @@ The application supports both single-page and batch scanning modes, making it su
 
 ### Built With
 
-* [![Svelte][Svelte.dev]][Svelte-url]
-* [![SvelteKit][SvelteKit.dev]][SvelteKit-url]
-* [![TypeScript][TypeScript.org]][TypeScript-url]
-* [![TailwindCSS][TailwindCSS.com]][TailwindCSS-url]
-* [![Vite][Vite.dev]][Vite-url]
-* [![Axe][Axe-core]][Axe-url]
+- [![Svelte][Svelte.dev]][Svelte-url]
+- [![SvelteKit][SvelteKit.dev]][SvelteKit-url]
+- [![TypeScript][TypeScript.org]][TypeScript-url]
+- [![TailwindCSS][TailwindCSS.com]][TailwindCSS-url]
+- [![Vite][Vite.dev]][Vite-url]
+- [![Axe][Axe-core]][Axe-url]
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 <!-- GETTING STARTED -->
+
 ## Getting Started
 
 To get a local copy up and running, follow these steps.
 
 ### Prerequisites
 
-* Node.js (version 18 or higher)
-* npm
+- Node.js (version 18 or higher)
+- npm
   ```sh
   npm install npm@latest -g
   ```
@@ -108,6 +112,7 @@ To get a local copy up and running, follow these steps.
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 <!-- USAGE EXAMPLES -->
+
 ## Usage
 
 ### Single Page Scanning
@@ -152,6 +157,7 @@ To get a local copy up and running, follow these steps.
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 <!-- ROADMAP -->
+
 ## Roadmap
 
 - [x] Single page accessibility scanning
@@ -172,6 +178,7 @@ To get a local copy up and running, follow these steps.
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 <!-- CONTRIBUTING -->
+
 ## Contributing
 
 Contributions are what make the open source community such an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.
@@ -208,6 +215,7 @@ npm run format       # Format code
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 <!-- LICENSE -->
+
 ## License
 
 Distributed under the MIT License. See `LICENSE.txt` for more information.
@@ -215,17 +223,19 @@ Distributed under the MIT License. See `LICENSE.txt` for more information.
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 <!-- ACKNOWLEDGMENTS -->
+
 ## Acknowledgments
 
-* [axe DevTools](https://www.deque.com/axe/) - The accessibility testing engine that powers our scans
-* [Web Content Accessibility Guidelines (WCAG)](https://www.w3.org/WAI/WCAG21/quickref/) - The standard we help websites achieve
-* [Svelte](https://svelte.dev/) - The amazing framework that makes this possible
-* [Tailwind CSS](https://tailwindcss.com/) - For the beautiful, accessible styling
-* [bits-ui](https://www.bits-ui.com/) - For accessible component primitives
+- [axe DevTools](https://www.deque.com/axe/) - The accessibility testing engine that powers our scans
+- [Web Content Accessibility Guidelines (WCAG)](https://www.w3.org/WAI/WCAG21/quickref/) - The standard we help websites achieve
+- [Svelte](https://svelte.dev/) - The amazing framework that makes this possible
+- [Tailwind CSS](https://tailwindcss.com/) - For the beautiful, accessible styling
+- [bits-ui](https://www.bits-ui.com/) - For accessible component primitives
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 <!-- MARKDOWN LINKS & IMAGES -->
+
 [Svelte.dev]: https://img.shields.io/badge/Svelte-4A4A55?style=for-the-badge&logo=svelte&logoColor=FF3E00
 [Svelte-url]: https://svelte.dev/
 [SvelteKit.dev]: https://img.shields.io/badge/SvelteKit-FF3E00?style=for-the-badge&logo=svelte&logoColor=white

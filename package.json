@@ -15,7 +15,12 @@
 		"test:unit": "vitest",
 		"test": "npm run test:unit -- --run && npm run test:e2e",
 		"test:e2e": "playwright test",
-		"storybook": "storybook dev -p 6006"
+		"storybook": "storybook dev -p 6006",
+		"build-storybook": "storybook build",
+		"vercel": "vercel",
+		"vercel:dev": "vercel dev",
+		"vercel:build": "npm run build",
+		"vercel:preview": "vercel --prod"
 	},
 	"devDependencies": {
 		"@chromatic-com/storybook": "^4.0.0",
@@ -32,6 +37,7 @@
 		"@storybook/addon-vitest": "^9.0.12",
 		"@storybook/sveltekit": "^9.0.12",
 		"@sveltejs/adapter-auto": "^6.0.0",
+		"@sveltejs/adapter-vercel": "^5.7.2",
 		"@sveltejs/kit": "^2.16.0",
 		"@sveltejs/vite-plugin-svelte": "^5.0.0",
 		"@tailwindcss/vite": "^4.0.0",
