@@ -18,7 +18,6 @@ This guide will help you set up per-branch deployments on Vercel for the WCAG Sc
    ```
 
 2. **Follow the prompts:**
-
    - Link to existing project? No
    - What's your project's name? `wcag-scanner`
    - In which directory is your code located? `./`
@@ -81,7 +80,6 @@ You can set different environment variables for different branches:
    ```
 
 2. **Configure DNS:**
-
    - Add CNAME record pointing to `cname.vercel-dns.com`
    - Or add A record pointing to Vercel's IP
 
@@ -113,13 +111,11 @@ NODE_ENV=development
 ### Automatic Deployments
 
 1. **Production (main branch):**
-
    - Push to `main` branch
    - Runs tests and linting
    - Deploys to production domain
 
 2. **Preview (feature branches):**
-
    - Push to any other branch
    - Creates preview deployment
    - Comments on PR with preview URL
@@ -182,12 +178,10 @@ adapter: adapter({
 ## Monitoring and Analytics
 
 1. **Vercel Analytics:**
-
    - Enable in Vercel Dashboard → Analytics
    - Add environment variable: `VERCEL_ANALYTICS_ID`
 
 2. **Function Logs:**
-
    - View in Vercel Dashboard → Functions
    - Real-time logs for API routes
 
@@ -200,13 +194,11 @@ adapter: adapter({
 ### Common Issues
 
 1. **Build Failures:**
-
    - Check build logs in Vercel Dashboard
    - Ensure all dependencies are in `package.json`
    - Verify TypeScript compilation
 
 2. **Function Timeouts:**
-
    - Vercel has a 10s timeout for Hobby plan
    - Optimize API routes for performance
    - Consider upgrading to Pro plan

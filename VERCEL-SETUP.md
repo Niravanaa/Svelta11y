@@ -37,13 +37,11 @@ Your WCAG Scanner project is now configured for Vercel deployments with per-bran
    ```
 
 2. **Set up Vercel:**
-
    - Visit [vercel.com](https://vercel.com) and sign up/login
    - Import your GitHub repository
    - Follow the setup wizard
 
 3. **Configure GitHub Secrets:**
-
    - Go to GitHub repo → Settings → Secrets and variables → Actions
    - Add required secrets (see DEPLOYMENT.md for details):
      - `VERCEL_TOKEN`
