@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WCAG Accessibility Scan Report</title>
+    <style>
+        * { box-sizing: border-box; }
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; 
+            margin: 0; 
+            padding: 20px; 
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #1e293b;
+            line-height: 1.6;
+        }
+        
+        .container { 
+            max-width: 1200px; 
+            margin: 0 auto; 
+            background: #f8fafc;
+            border-radius: 16px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+            overflow: hidden;
+        }
+        
+        .header { 
+            background: linear-gradient(135deg, #1e293b 0%, #334155 100%); 
+            color: white; 
+            padding: 3rem 2rem; 
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"><g fill="none" fill-rule="evenodd"><g fill="%23ffffff" fill-opacity="0.05"><circle cx="30" cy="30" r="4"/></g></svg>') repeat;
+        }
+        
+        .header-content { position: relative; z-index: 1; }
+        .header h1 { 
+            margin: 0 0 1rem 0; 
+            font-size: 3rem; 
+            font-weight: 700;
+            background: linear-gradient(45deg, #60a5fa, #34d399);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .header p { margin: 0; opacity: 0.9; font-size: 1.2rem; }
+        
+        .tabs {
+            display: flex;
+            background: white;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        .tab {
+            flex: 1;
+            padding: 1.5rem 2rem;
+            cursor: pointer;
+            border: none;
+            background: transparent;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #64748b;
+            position: relative;
+        }
+        .tab.active { 
+            color: #3b82f6; 
+            background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+        }
+        .tab.active::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #3b82f6, #1d4ed8);
+        }
+        .tab:hover:not(.active) { 
+            background: #f8fafc; 
+            color: #475569;
+        }
+        
+        .tab-content { 
+            display: none; 
+            padding: 2rem;
+            min-height: 400px;
+        }
+        .tab-content.active { display: block; }
+        
+        .summary-overview {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+        
+        .overview-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            text-align: center;
+            border: 1px solid #e2e8f0;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .overview-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+        }
+        
+        .overview-number { 
+            font-size: 2.5rem; 
+            font-weight: 800; 
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+        .overview-label { 
+            color: #64748b; 
+            font-size: 0.9rem; 
+            text-transform: uppercase; 
+            letter-spacing: 1px; 
+            font-weight: 600;
+        }
+        .overview-total { color: #6366f1; }
+        .overview-critical { color: #dc2626; }
+        .overview-serious { color: #ea580c; }
+        .overview-moderate { color: #ca8a04; }
+        .overview-minor { color: #16a34a; }
+        
+        .website { 
+            background: white; 
+            margin: 2rem 0; 
+            border-radius: 16px; 
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            overflow: hidden;
+            border: 1px solid #e2e8f0;
+        }
+        
+        .website-header {
+            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+            padding: 2rem;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        .website-content { padding: 2rem; }
+        .website h2 { 
+            margin: 0 0 1rem 0; 
+            color: #1e293b; 
+            font-size: 1.8rem;
+            font-weight: 700;
+        }
+        .website-meta { 
+            color: #64748b; 
+            font-size: 1rem;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2rem;
+        }
+        .website-meta strong { color: #374151; }
+        
+        .violation-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+        .stat-card {
+            background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+            padding: 1.5rem;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            text-align: center;
+            border: 1px solid #e2e8f0;
+        }
+        .stat-number { 
+            font-size: 2rem; 
+            font-weight: 700; 
+            margin-bottom: 0.5rem; 
+            display: block;
+        }
+        .stat-label { 
+            color: #64748b; 
+            font-size: 0.85rem; 
+            text-transform: uppercase; 
+            letter-spacing: 0.5px; 
+            font-weight: 600;
+        }
+        .stat-critical { color: #dc2626; }
+        .stat-serious { color: #ea580c; }
+        .stat-moderate { color: #ca8a04; }
+        .stat-minor { color: #16a34a; }
+        
+        .violations-list {
+            margin-top: 2rem;
+        }
+        .violations-list h3 {
+            color: #1e293b;
+            margin-bottom: 1.5rem;
+            font-size: 1.3rem;
+            font-weight: 600;
+        }
+        
+        .violation { 
+            margin: 1rem 0; 
+            padding: 1.5rem; 
+            border-left: 4px solid #dc2626; 
+            background: #fef2f2; 
+            border-radius: 0 12px 12px 0;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            transition: transform 0.2s;
+        }
+        .violation:hover { transform: translateX(4px); }
+        .violation.critical { border-color: #dc2626; background: #fef2f2; }
+        .violation.serious { border-color: #ea580c; background: #fff7ed; }
+        .violation.moderate { border-color: #ca8a04; background: #fffbeb; }
+        .violation.minor { border-color: #16a34a; background: #f0fdf4; }
+        
+        .violation-header {
+            font-weight: 700;
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+            color: #1e293b;
+        }
+        .violation-count {
+            font-size: 0.9rem;
+            color: #64748b;
+            font-weight: 500;
+        }
+        
+        .logs-container {
+            background: #0f172a;
+            border-radius: 12px;
+            padding: 1.5rem;
+            font-family: 'JetBrains Mono', 'Fira Code', 'Courier New', Monaco, monospace;
+            font-size: 0.875rem;
+            max-height: 600px;
+            overflow-y: auto;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+            border: 1px solid #1e293b;
+        }
+        
+        .logs-header {
+            color: #94a3b8;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid #334155;
+            font-weight: 600;
+        }
+        
+        .log-entry {
+            padding: 0.4rem 0;
+            border-bottom: 1px solid #1e293b;
+            word-wrap: break-word;
+            transition: background-color 0.2s;
+        }
+        .log-entry:hover { background-color: #1e293b; }
+        .log-entry:last-child { border-bottom: none; }
+        
+        .log-timestamp { 
+            color: #64748b; 
+            margin-right: 0.75rem;
+            font-weight: 500;
+        }
+        .log-level {
+            display: inline-block;
+            width: 60px;
+            text-align: center;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: 600;
+            font-size: 0.75rem;
+            margin-right: 0.75rem;
+        }
+        .log-info { background: #0284c7; color: white; }
+        .log-error { background: #dc2626; color: white; }
+        .log-warn { background: #ea580c; color: white; }
+        .log-debug { background: #7c3aed; color: white; }
+        
+        .log-message { color: #e2e8f0; }
+        
+        .no-violations {
+            text-align: center;
+            padding: 4rem 2rem;
+            color: #16a34a;
+            font-size: 1.3rem;
+            background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+            border-radius: 12px;
+            border: 2px solid #16a34a20;
+        }
+        .no-violations::before {
+            content: "✅";
+            display: block;
+            font-size: 4rem;
+            margin-bottom: 1rem;
+        }
+        
+        .no-logs {
+            text-align: center;
+            padding: 4rem 2rem;
+            color: #64748b;
+            font-style: italic;
+        }
+        
+        .scroll-indicator {
+            position: sticky;
+            top: 0;
+            background: linear-gradient(to bottom, #0f172a, transparent);
+            height: 20px;
+            margin: -1.5rem -1.5rem 0 -1.5rem;
+            pointer-events: none;
+        }
+        
+        @media (max-width: 768px) {
+            .container { margin: 0; border-radius: 0; }
+            .header { padding: 2rem 1rem; }
+            .header h1 { font-size: 2rem; }
+            .tab { padding: 1rem; font-size: 1rem; }
+            .tab-content { padding: 1rem; }
+            .website-meta { flex-direction: column; gap: 0.5rem; }
+            .summary-overview { grid-template-columns: 1fr; }
+            .violation-stats { grid-template-columns: repeat(2, 1fr); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="header-content">
+                <h1>🔍 WCAG Accessibility Report</h1>
+                <p>Generated on <%= executionDate %></p>
+            </div>
+        </div>
+
+        <div class="tabs">
+            <button class="tab active" onclick="showTab('summary')">📊 Summary</button>
+            <button class="tab" onclick="showTab('logs')">📋 Terminal Logs</button>
+        </div>
+
+        <div id="summary" class="tab-content active">
+            <% 
+            const totalSites = websites.length;
+            const totalViolations = websites.reduce((sum, site) => sum + site.overallViolations.length, 0);
+            const totalCritical = websites.reduce((sum, site) => sum + site.violationSummary.filter(v => v.severity.toLowerCase() === 'critical').reduce((s, v) => s + v.count, 0), 0);
+            const totalSerious = websites.reduce((sum, site) => sum + site.violationSummary.filter(v => v.severity.toLowerCase() === 'serious').reduce((s, v) => s + v.count, 0), 0);
+            const totalModerate = websites.reduce((sum, site) => sum + site.violationSummary.filter(v => v.severity.toLowerCase() === 'moderate').reduce((s, v) => s + v.count, 0), 0);
+            const totalMinor = websites.reduce((sum, site) => sum + site.violationSummary.filter(v => v.severity.toLowerCase() === 'minor').reduce((s, v) => s + v.count, 0), 0);
+            %>
+
+            <div class="summary-overview">
+                <div class="overview-card">
+                    <span class="overview-number overview-total"><%= totalSites %></span>
+                    <div class="overview-label">Websites Scanned</div>
+                </div>
+                <div class="overview-card">
+                    <span class="overview-number overview-total"><%= totalViolations %></span>
+                    <div class="overview-label">Total Violations</div>
+                </div>
+                <div class="overview-card">
+                    <span class="overview-number overview-critical"><%= totalCritical %></span>
+                    <div class="overview-label">Critical</div>
+                </div>
+                <div class="overview-card">
+                    <span class="overview-number overview-serious"><%= totalSerious %></span>
+                    <div class="overview-label">Serious</div>
+                </div>
+                <div class="overview-card">
+                    <span class="overview-number overview-moderate"><%= totalModerate %></span>
+                    <div class="overview-label">Moderate</div>
+                </div>
+                <div class="overview-card">
+                    <span class="overview-number overview-minor"><%= totalMinor %></span>
+                    <div class="overview-label">Minor</div>
+                </div>
+            </div>
+
+            <% if (websites.length === 0) { %>
+                <div class="no-violations">No websites were scanned</div>
+            <% } else { %>
+                <% websites.forEach(website => { %>
+                    <% 
+                    const siteViolations = website.overallViolations.length;
+                    const siteCritical = website.violationSummary.filter(v => v.severity.toLowerCase() === 'critical').reduce((sum, v) => sum + v.count, 0);
+                    const siteSerious = website.violationSummary.filter(v => v.severity.toLowerCase() === 'serious').reduce((sum, v) => sum + v.count, 0);
+                    const siteModerate = website.violationSummary.filter(v => v.severity.toLowerCase() === 'moderate').reduce((sum, v) => sum + v.count, 0);
+                    const siteMinor = website.violationSummary.filter(v => v.severity.toLowerCase() === 'minor').reduce((sum, v) => sum + v.count, 0);
+                    %>
+                    <div class="website">
+                        <div class="website-header">
+                            <h2><%= website.name %></h2>
+                            <div class="website-meta">
+                                <span><strong>URL:</strong> <%= website.rootUrl %></span>
+                                <span><strong>Pages Scanned:</strong> <%= website.pagesScanned.length %></span>
+                                <span><strong>Total Violations:</strong> <%= siteViolations %></span>
+                            </div>
+                        </div>
+                        <div class="website-content">
+                            <% if (siteViolations > 0) { %>
+                                <div class="violation-stats">
+                                    <div class="stat-card">
+                                        <span class="stat-number stat-critical"><%= siteCritical %></span>
+                                        <div class="stat-label">Critical</div>
+                                    </div>
+                                    <div class="stat-card">
+                                        <span class="stat-number stat-serious"><%= siteSerious %></span>
+                                        <div class="stat-label">Serious</div>
+                                    </div>
+                                    <div class="stat-card">
+                                        <span class="stat-number stat-moderate"><%= siteModerate %></span>
+                                        <div class="stat-label">Moderate</div>
+                                    </div>
+                                    <div class="stat-card">
+                                        <span class="stat-number stat-minor"><%= siteMinor %></span>
+                                        <div class="stat-label">Minor</div>
+                                    </div>
+                                </div>
+                                <div class="violations-list">
+                                    <h3>Violations Summary</h3>
+                                    <% website.violationSummary.forEach(violation => { %>
+                                        <div class="violation <%= violation.severity.toLowerCase() %>">
+                                            <div class="violation-header"><%= violation.id %></div>
+                                            <div class="violation-count"><%= violation.count %> instances (<%= violation.severity %>)</div>
+                                        </div>
+                                    <% }) %>
+                                </div>
+                            <% } else { %>
+                                <div class="no-violations">
+                                    No accessibility violations found! 🎉
+                                </div>
+                            <% } %>
+                        </div>
+                    </div>
+                <% }) %>
+            <% } %>
+        </div>
+
+        <div id="logs" class="tab-content">
+            <div class="logs-container">
+                <div class="scroll-indicator"></div>
+                <div class="logs-header">📋 Scan Execution Logs</div>
+                <% if (logs && logs.length > 0) { %>
+                    <% logs.forEach(log => { %>
+                        <% 
+                        const timestamp = new Date(log.timestamp).toLocaleTimeString();
+                        const levelClass = `log-${log.level}`;
+                        %>
+                        <div class="log-entry">
+                            <span class="log-timestamp">[<%= timestamp %>]</span>
+                            <span class="log-level <%= levelClass %>"><%= log.level.toUpperCase() %></span>
+                            <span class="log-message"><%= log.message %></span>
+                        </div>
+                    <% }) %>
+                <% } else { %>
+                    <div class="no-logs">No logs available for this scan session</div>
+                <% } %>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function showTab(tabName) {
+            // Hide all tab contents
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            
+            // Remove active class from all tabs
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Show selected tab content
+            document.getElementById(tabName).classList.add('active');
+            
+            // Add active class to clicked tab
+            event.target.classList.add('active');
+        }
+
+        // Auto-scroll logs to bottom on load
+        document.addEventListener('DOMContentLoaded', function() {
+            const logsContainer = document.querySelector('.logs-container');
+            if (logsContainer) {
+                logsContainer.scrollTop = logsContainer.scrollHeight;
+            }
+        });
+    </script>
+</body>
+</html>

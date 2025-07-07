@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { Button } from '$lib/components/ui/button';
+	import { page } from '$app/stores';
 	import '../app.css';
 </script>
 
@@ -9,13 +10,13 @@
 		<div class="container mx-auto flex items-center justify-between">
 			<h1 class="text-2xl font-bold tracking-tight">WCAG Scanner</h1>
 			<nav class="space-x-2">
-				<Button variant="default">
+				<Button variant={$page.url.pathname === '/' ? 'default' : 'outline'}>
 					<a href="/">Home</a>
 				</Button>
-				<Button variant="default">
+				<Button variant={$page.url.pathname === '/about' ? 'default' : 'outline'}>
 					<a href="/about">About</a>
 				</Button>
-				<Button variant="default">
+				<Button variant={$page.url.pathname === '/scan' ? 'default' : 'outline'}>
 					<a href="/scan">Scan</a>
 				</Button>
 			</nav>
