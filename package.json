@@ -4,14 +4,14 @@
 	"version": "0.0.1",
 	"type": "module",
 	"engines": {
-		"node": "^20.0.0"
+		"node": "^20.0.0 || ^22.0.0"
 	},
 	"scripts": {
 		"dev": "vite dev",
 		"build": "vite build",
 		"preview": "vite preview",
 		"prepare": "husky",
-		"postinstall": "node -e \"const v=process.version; if(!v.startsWith('v20.')){console.warn('⚠️  Warning: Node.js 20.x recommended for optimal compatibility');}\"",
+		"postinstall": "node -e \"const v=process.version; if(!v.startsWith('v20.') && !v.startsWith('v22.')){console.warn('⚠️  Warning: Node.js 20.x or 22.x recommended for optimal compatibility');}\"",
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
 		"format": "prettier --write .",
