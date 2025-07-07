@@ -5,7 +5,12 @@
 <!-- PROJECT LOGO -->
 <br />
 <div align="center">
-  <h3 align="center">WCAG Scanner</h3>
+  <div align="center" style="display: flex; justify-content: center; gap: 20px; flex-wrap: wrap;">
+      <img src="https://i.imgur.com/6LxXRBJ.png" alt="WCAG Scanner Interface" style="border-radius: 12px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);" width="500">
+      <img src="https://i.imgur.com/sao6I7r.png" alt="WCAG Scanner Results" style="border-radius: 12px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);" width="500">
+  </div>
+  
+  <h3 align="center">Svelta11y</h3>
 
   <p align="center">
     A comprehensive web accessibility scanner powered by axe DevTools
