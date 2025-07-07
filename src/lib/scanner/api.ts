@@ -95,12 +95,26 @@ export class WCAGScanner {
 	async initialize(): Promise<void> {
 		if (!this.browser) {
 			console.log(`🚀 Launching browser in ${this.debugMode ? 'headed (DEBUG)' : 'headless'} mode`);
-			this.browser = await playwright.launch({
+
+			// Configure launch options for serverless compatibility
+			const launchOptions: import('playwright-core').LaunchOptions = {
 				args: chromium.args,
 				executablePath: await chromium.executablePath(),
-				headless: chromium.headless === true,
-				devtools: this.debugMode
-			});
+				headless: true, // Force headless in serverless
+				ignoreDefaultArgs: ['--disable-extensions'],
+				env: {
+					...process.env,
+					FONTCONFIG_PATH: '/tmp'
+				}
+			};
+
+			// Only enable devtools in local debug mode (not in serverless)
+			if (this.debugMode && process.env.NODE_ENV !== 'production') {
+				launchOptions.headless = false;
+				launchOptions.devtools = true;
+			}
+
+			this.browser = await playwright.launch(launchOptions);
 			this.context = await this.browser.newContext({
 				// Set a realistic user agent to avoid anti-bot detection
 				userAgent:
