@@ -98,14 +98,20 @@ export class WCAGScanner {
 
 			// Configure launch options for serverless compatibility
 			const launchOptions: import('playwright-core').LaunchOptions = {
-				args: chromium.args,
+				args: [
+					...chromium.args,
+					'--no-sandbox',
+					'--disable-setuid-sandbox',
+					'--disable-dev-shm-usage',
+					'--disable-gpu',
+					'--no-first-run',
+					'--no-zygote',
+					'--single-process',
+					'--disable-features=VizDisplayCompositor'
+				],
 				executablePath: await chromium.executablePath(),
-				headless: true, // Force headless in serverless
-				ignoreDefaultArgs: ['--disable-extensions'],
-				env: {
-					...process.env,
-					FONTCONFIG_PATH: '/tmp'
-				}
+				headless: true,
+				ignoreDefaultArgs: ['--disable-extensions']
 			};
 
 			// Only enable devtools in local debug mode (not in serverless)
@@ -114,12 +120,19 @@ export class WCAGScanner {
 				launchOptions.devtools = true;
 			}
 
-			this.browser = await playwright.launch(launchOptions);
-			this.context = await this.browser.newContext({
-				// Set a realistic user agent to avoid anti-bot detection
-				userAgent:
-					'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
-			});
+			try {
+				this.browser = await playwright.launch(launchOptions);
+				this.context = await this.browser.newContext({
+					// Set a realistic user agent to avoid anti-bot detection
+					userAgent:
+						'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
+				});
+			} catch (error) {
+				console.error('Browser launch failed:', error);
+				throw new Error(
+					`Failed to launch browser: ${error instanceof Error ? error.message : 'Unknown error'}`
+				);
+			}
 		}
 		if (!this.logger) {
 			this.logger = new ScanLogger();
