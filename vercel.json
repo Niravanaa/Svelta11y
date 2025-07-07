@@ -5,11 +5,6 @@
 	"framework": "sveltekit",
 	"installCommand": "npm install",
 	"devCommand": "npm run dev",
-	"functions": {
-		"src/routes/api/**/*.ts": {
-			"runtime": "nodejs20.x"
-		}
-	},
 	"git": {
 		"deploymentEnabled": {
 			"main": true,
