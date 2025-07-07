@@ -1,5 +1,6 @@
-import { chromium } from 'playwright';
-import type { Browser, BrowserContext } from 'playwright';
+import { chromium as playwright } from 'playwright-core';
+import chromium from '@sparticuz/chromium';
+import type { Browser, BrowserContext } from 'playwright-core';
 import type {
 	ScanOptions,
 	SinglePageScanResult,
@@ -94,8 +95,10 @@ export class WCAGScanner {
 	async initialize(): Promise<void> {
 		if (!this.browser) {
 			console.log(`🚀 Launching browser in ${this.debugMode ? 'headed (DEBUG)' : 'headless'} mode`);
-			this.browser = await chromium.launch({
-				headless: !this.debugMode, // Only run headed when explicitly in debug mode
+			this.browser = await playwright.launch({
+				args: chromium.args,
+				executablePath: await chromium.executablePath(),
+				headless: chromium.headless === true,
 				devtools: this.debugMode
 			});
 			this.context = await this.browser.newContext({

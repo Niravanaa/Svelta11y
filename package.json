@@ -8,7 +8,7 @@
 	},
 	"scripts": {
 		"dev": "vite dev",
-		"build": "vite build && npx playwright install",
+		"build": "vite build",
 		"preview": "vite preview",
 		"prepare": "husky",
 		"postinstall": "node -e \"const v=process.version; if(!v.startsWith('v20.') && !v.startsWith('v22.')){console.warn('⚠️  Warning: Node.js 20.x or 22.x recommended for optimal compatibility');}\"",
@@ -73,10 +73,12 @@
 		"vitest-browser-svelte": "^0.1.0"
 	},
 	"dependencies": {
+		"@sparticuz/chromium": "^129.0.0",
 		"@types/ejs": "^3.1.5",
 		"@vitest/coverage-v8": "^3.2.4",
 		"ejs": "^3.1.10",
-		"playwright": "^1.53.0"
+		"playwright": "^1.53.0",
+		"playwright-core": "^1.53.2"
 	},
 	"lint-staged": {
 		"*.{js,ts,svelte}": [
