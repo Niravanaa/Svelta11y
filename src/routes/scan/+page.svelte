@@ -25,7 +25,8 @@
 		loadConfigProfile,
 		isBatchResult,
 		getAllViolations,
-		getSummary
+		getSummary,
+		getAllSites
 	} from '$lib/scan/utils.js';
 	import { exportToCSV, exportToHTML, downloadFile, generateFilename } from '$lib/scan/export.js';
 	import { Label } from '$lib/components/ui/label';
@@ -48,6 +49,7 @@
 
 	// Filtering and display state
 	let selectedSeverityFilter = 'all';
+	let selectedSiteFilter = 'all';
 	let searchTerm = '';
 	let violationsPerPage = 10;
 	let currentPage = 1;
@@ -194,8 +196,9 @@
 	// Computed values
 	$: summary = getSummary(scanResults);
 	$: allViolations = getAllViolations(scanResults);
+	$: allSites = getAllSites(scanResults);
 
-	// Filtered violations based on search and severity filter
+	// Filtered violations based on search, severity, and site filter
 	$: filteredViolations = allViolations.filter((violation) => {
 		const matchesSearch =
 			!searchTerm ||
@@ -205,7 +208,9 @@
 		const matchesSeverity =
 			selectedSeverityFilter === 'all' || violation.impact === selectedSeverityFilter;
 
-		return matchesSearch && matchesSeverity;
+		const matchesSite = selectedSiteFilter === 'all' || violation.siteUrl === selectedSiteFilter;
+
+		return matchesSearch && matchesSeverity && matchesSite;
 	});
 
 	// Paginated violations
@@ -217,7 +222,7 @@
 	$: totalPages = Math.ceil(filteredViolations.length / violationsPerPage);
 
 	// Reset pagination when filters change
-	$: if (searchTerm || selectedSeverityFilter) {
+	$: if (searchTerm || selectedSeverityFilter || selectedSiteFilter) {
 		currentPage = 1;
 	}
 </script>
@@ -292,7 +297,8 @@
 					<Button
 						size="lg"
 						onclick={performScan}
-						disabled={isScanning || (!scanUrl && !scanUrls.some((url) => url.trim()))}
+						disabled={isScanning ||
+							(isMultiUrl ? !scanUrls.some((url) => url.trim()) : !scanUrl.trim())}
 						class="bg-blue-600 px-12 py-4 text-lg font-semibold text-white shadow-lg hover:bg-blue-700"
 					>
 						{#if isScanning}
@@ -423,7 +429,9 @@
 					<!-- Filters and Search -->
 					{#if allViolations.length > 0}
 						<div
-							class="mb-6 grid gap-4 rounded-lg bg-slate-50 p-4 md:grid-cols-3 dark:bg-slate-800/50"
+							class="mb-6 grid gap-4 rounded-lg bg-slate-50 p-4 {allSites.length > 1
+								? 'md:grid-cols-4'
+								: 'md:grid-cols-3'} dark:bg-slate-800/50"
 						>
 							<div class="space-y-2">
 								<Label for="search" class="text-sm font-medium">Search Violations</Label>
@@ -462,6 +470,22 @@
 									<option value="minor">Minor</option>
 								</select>
 							</div>
+
+							{#if allSites.length > 1}
+								<div class="space-y-2">
+									<Label for="site-filter" class="text-sm font-medium">Filter by Site</Label>
+									<select
+										id="site-filter"
+										bind:value={selectedSiteFilter}
+										class="w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-slate-900 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-100"
+									>
+										<option value="all">All Sites</option>
+										{#each allSites as site (site)}
+											<option value={site}>{new URL(site).hostname}</option>
+										{/each}
+									</select>
+								</div>
+							{/if}
 
 							<div class="space-y-2">
 								<Label for="per-page" class="text-sm font-medium">Results per Page</Label>
