@@ -2,7 +2,7 @@
 name: Bug report
 about: Create a bug report to help improve the project
 labels: bug
-assignees: ""
+assignees: ''
 ---
 
 ### 🐛 Issue Summary:
@@ -29,7 +29,7 @@ assignees: ""
 
 ### 🔗 Related Links
 
-**Fix Commit:** 
+**Fix Commit:**
 
 - [Other Commits/Tests]
 

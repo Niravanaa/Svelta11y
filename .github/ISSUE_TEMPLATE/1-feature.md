@@ -2,7 +2,7 @@
 name: Feature
 about: Create a new feature
 labels: feature
-assignees: ""
+assignees: ''
 ---
 
 ### 🚀 Summary:
