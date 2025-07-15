@@ -8,7 +8,8 @@ vi.mock('$lib/scan/utils.js', () => ({
 	loadConfigProfile: vi.fn(),
 	isBatchResult: vi.fn(),
 	getAllViolations: vi.fn(() => []),
-	getSummary: vi.fn(() => ({ total: 0, violations: 0, passes: 0 }))
+	getSummary: vi.fn(() => ({ total: 0, violations: 0, passes: 0 })),
+	getAllSites: vi.fn(() => [])
 }));
 
 vi.mock('$lib/scan/export.js', () => ({
