@@ -222,16 +222,12 @@
 	}
 </script>
 
-<div
-	class="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-800"
->
+<div class="min-h-screen bg-slate-50 dark:bg-slate-900">
 	<div class="container mx-auto space-y-8 px-4 py-8">
 		<!-- Header -->
 		<Card class="border-0 bg-white/80 shadow-xl backdrop-blur-sm">
 			<CardHeader class="py-12 text-center">
-				<CardTitle
-					class="mb-4 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-5xl font-bold text-transparent"
-				>
+				<CardTitle class="mb-4 text-5xl font-bold text-blue-600 dark:text-blue-400">
 					WCAG Scanner
 				</CardTitle>
 				<CardDescription class="mx-auto max-w-2xl text-xl text-slate-600 dark:text-slate-400">
@@ -297,7 +293,7 @@
 						size="lg"
 						onclick={performScan}
 						disabled={isScanning || (!scanUrl && !scanUrls.some((url) => url.trim()))}
-						class="bg-gradient-to-r from-blue-600 to-purple-600 px-12 py-4 text-lg font-semibold text-white shadow-lg hover:from-blue-700 hover:to-purple-700"
+						class="bg-blue-600 px-12 py-4 text-lg font-semibold text-white shadow-lg hover:bg-blue-700"
 					>
 						{#if isScanning}
 							<svg
