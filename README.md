@@ -6,8 +6,8 @@
 <br />
 <div align="center">
   <div align="center" style="display: flex; justify-content: center; gap: 20px; flex-wrap: wrap;">
-      <img src="https://i.imgur.com/6LxXRBJ.png" alt="WCAG Scanner Interface" style="border-radius: 12px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);" width="500">
-      <img src="https://i.imgur.com/sao6I7r.png" alt="WCAG Scanner Results" style="border-radius: 12px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);" width="500">
+      <img width="1060" height="593" alt="68747470733a2f2f692e696d6775722e636f6d2f364c785852424a2e706e67" src="https://github.com/user-attachments/assets/825f5a4a-0fd2-4159-a620-f7c8ad138bb7" style="border-radius: 12px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);" width="500" />
+      <img width="1063" height="599" alt="68747470733a2f2f692e696d6775722e636f6d2f73616f364937722e706e67" src="https://github.com/user-attachments/assets/ea009d2f-3a92-4671-9c91-260656daa087" style="border-radius: 12px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);" width="500" />
   </div>
   
   <h3 align="center">Svelta11y</h3>
